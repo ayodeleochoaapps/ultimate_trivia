@@ -34,4 +34,24 @@ class GetQuestion {
             throw Exception("Error fetching question: ${e.localizedMessage}", e)
         }
     }
+
+    suspend fun fetchRandomQuestions(): String {
+        return try {
+            val response = generativeModel.generateContent(
+                content {
+                    text(
+                        "return 10 questions about math, science, music, movies, tv shows, art, decades, history,\n" +
+                                "animals, geography, current events, pop culture, food or sports with 4 options and also " +
+                                "return the correct answer with a difficulty of very easy, easy, medium, hard and very hard. " +
+                                "Return in the proper JSON Array format returning nothing before the brackets, with keys question, options, answer, difficulty and category."
+                    )
+                }
+            )
+            println(response.text)
+            response.text ?: throw Exception("Empty response from model")
+
+        } catch (e: Exception) {
+            throw Exception("Error fetching question: ${e.localizedMessage}", e)
+        }
+    }
 }

@@ -1,10 +1,13 @@
 plugins {
+
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 
     // Add the Google services Gradle plugin
     id("com.google.gms.google-services")
+    id("kotlin-kapt")
+
 
 }
 
@@ -18,12 +21,12 @@ repositories {
 
 android {
     namespace = "com.ayoapps.blackcarddenied"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.ayoapps.blackcarddenied"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -50,8 +53,10 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
-        compose = true
+        compose = false
         buildConfig = true
+        dataBinding = true
+        viewBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -69,6 +74,7 @@ android {
 
 dependencies {
 
+    implementation("androidx.databinding:databinding-runtime:8.7.2")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -87,6 +93,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.fragment.ktx)
+    implementation(libs.support.annotations)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -98,6 +105,16 @@ dependencies {
     implementation("com.google.cloud:google-cloud-aiplatform:3.35.0")
    // implementation("com.google.protobuf:protobuf-javalite:3.25.5")
     implementation("io.grpc:grpc-okhttp:1.62.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3")
+
+    // kapt("androidx.lifecycle:lifecycle-compiler:2.8.7")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
+    // kapt("androidx.lifecycle:lifecycle-compiler:2.5.1")
+    // kapt("androidx.lifecycle:lifecycle-compiler:2.3.1")
+
+    kapt("com.android.tools.build:gradle:8.1.0")
 
 
 

@@ -1,10 +1,11 @@
 package com.example.blackcarddenied.models
 
-class Round(
+open class Round(
     private val questions: List<Question>
 ) {
     private var currentQuestionIndex = 0
     private var score = 0
+    val fetchQuestion = GetQuestion()
 
     fun getCurrentQuestion(): Question? {
         return if (currentQuestionIndex < questions.size) {
@@ -12,6 +13,14 @@ class Round(
         } else {
             null // No more questions
         }
+    }
+
+    open suspend fun getQuestions(): String{
+      return  fetchQuestion.fetchQuestion("sports", "easy")
+    }
+
+    open fun getRoundName(): String{
+        return "ROUND"
     }
 
     fun answerQuestion(userAnswer: String, questionValue: Int): Boolean {
