@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" >
+
+<data>
+    <variable
+        name = "gameData"
+        type = "com.example.blackcarddenied.models.GameData" />
+
+</data>
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
@@ -11,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="@string/random_round"
+        android:text="@{gameData.roundName}"
         android:textColor="@color/white"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -175,3 +184,5 @@
         android:layout_marginBottom="24dp"/>
 
 </RelativeLayout>
+
+</layout>

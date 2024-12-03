@@ -7,9 +7,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil.setContentView
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.ayoapps.blackcarddenied.R
+import com.ayoapps.blackcarddenied.databinding.FragmentGameMainBinding
 import com.ayoapps.blackcarddenied.viewmodels.GameMainViewModel
+import com.example.blackcarddenied.models.RandomRound
 import com.example.blackcarddenied.views.RoundDialogFragment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class GameMainFragment : Fragment() {
 
@@ -26,14 +36,24 @@ class GameMainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-       val question1 = gameMainViewModel.loadQuestion(subjects.random(), difficulty.random())
-       Log.d("question1", question1.toString())
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+/*        val binding: FragmentGameMainBinding = view?.let { DataBindingUtil.bind(it) }!!
+        //  binding.lifecycleOwner = this
+
+        gameMainViewModel.pickARound()
+
+        // Observing LiveData from the ViewModel
+        gameMainViewModel.roundName.observe(viewLifecycleOwner, Observer { newText ->
+            // Update the TextView when the data changes
+            binding.txtRoundName.text = newText
+        })*/
 
         RoundDialogFragment().show(parentFragmentManager, "MyDialog")
 
