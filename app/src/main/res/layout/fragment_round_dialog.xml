@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name = "gameData"
+            type = "com.example.blackcarddenied.models.GameData" />
+
+        <variable
+            name = "gameViewModel"
+            type = "com.ayoapps.blackcarddenied.viewmodels.GameMainViewModel" />
+    </data>
+
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -10,7 +22,7 @@
         android:id="@+id/txtRoundTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/quickness_round"
+        android:text="@{gameViewModel.gameData.roundName}"
         android:textSize="30sp"
         android:textStyle="bold"
         android:textColor="@color/black"
@@ -21,7 +33,7 @@
         android:id="@+id/txtRoundDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/quickness_round_desc"
+        android:text="@{gameViewModel.gameData.roundDescription}"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textAlignment="center"
@@ -31,8 +43,10 @@
         android:id="@+id/startButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Start"
+        android:enabled="@{gameViewModel.gameData.questionsLoaded}"
+        android:text="@string/start"
         android:textStyle="bold"
-        android:backgroundTint="@color/green"
+        android:background="@drawable/button_color_selector"
         android:textColor="@android:color/white" />
 </LinearLayout>
+</layout>

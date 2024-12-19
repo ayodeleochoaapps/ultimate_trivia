@@ -7,6 +7,10 @@
         name = "gameData"
         type = "com.example.blackcarddenied.models.GameData" />
 
+    <variable
+        name = "gameViewModel"
+        type = "com.ayoapps.blackcarddenied.viewmodels.GameMainViewModel" />
+
 </data>
 
 <RelativeLayout
@@ -31,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:text="@string/woodchuck"
+        android:text="@{gameViewModel.gameData.currentQuestion}"
         android:textColor="@color/green"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -60,7 +64,7 @@
             android:id="@+id/int_points"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/_25"
+            android:text="@{gameData.currentPointTotal.toString()}"
             android:textColor="@color/teal_200"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -74,7 +78,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="16dp"
-            android:text="@string/history"
+            android:text="@{gameData.currentCategory}"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -95,7 +99,8 @@
             android:layout_height="150dp"
             android:layout_weight="50"
             android:background="@color/teal_200"
-            android:text="A"
+            android:text="@{gameData.answerA}"
+            android:onClick="@{(view) -> gameViewModel.checkAnswer(view)}"
             android:textColor="@color/black"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"/>
@@ -106,7 +111,8 @@
             android:layout_height="150dp"
             android:layout_weight="50"
             android:background="@color/teal_200"
-            android:text="B"
+            android:text="@{gameData.answerB}"
+            android:onClick="@{(view) -> gameViewModel.checkAnswer(view)}"
             android:textColor="@color/black"
             android:layout_marginEnd="16dp"/>
 
@@ -126,7 +132,8 @@
             android:layout_height="150dp"
             android:layout_weight="50"
             android:background="@color/teal_200"
-            android:text="C"
+            android:text="@{gameData.answerC}"
+            android:onClick="@{(view) -> gameViewModel.checkAnswer(view)}"
             android:textColor="@color/black"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"/>
@@ -137,7 +144,8 @@
             android:layout_height="150dp"
             android:layout_weight="50"
             android:background="@color/teal_200"
-            android:text="D"
+            android:text="@{gameData.answerD}"
+            android:onClick="@{(view) -> gameViewModel.checkAnswer(view)}"
             android:textColor="@color/black"
             android:layout_marginEnd="16dp"/>
 
@@ -161,7 +169,7 @@
         android:id="@+id/int_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/_0"
+        android:text="@{gameData.currentScore.toString()}"
         android:textColor="@color/teal_200"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -177,7 +185,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/_60"
+        android:text="@{gameData.clockTime}"
         android:textColor="@color/teal_200"
         android:textSize="32sp"
         android:textStyle="bold"
