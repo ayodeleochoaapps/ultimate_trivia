@@ -15,6 +15,8 @@ sealed interface UiState {
      */
     object Loading : UiState
 
+    object Finish : UiState
+
     /**
      * Text has been generated
      */

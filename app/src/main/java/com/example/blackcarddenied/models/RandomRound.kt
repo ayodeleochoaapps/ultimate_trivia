@@ -1,6 +1,11 @@
 package com.example.blackcarddenied.models
 
+import android.content.Context
+import com.ayoapps.blackcarddenied.R
+
+
 class RandomRound(
+    private val context: Context,
     questions: List<Question>
 ) : Round(questions) {
 
@@ -9,6 +14,10 @@ class RandomRound(
     }
 
     override fun getRoundName(): String {
-        return "RANDOM ROUND"
+        return context.getString(R.string.random_round)
+    }
+
+    override fun getRoundDescription(): String {
+        return context.getString(R.string.random_round_desc)
     }
 }

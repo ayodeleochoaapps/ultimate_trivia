@@ -1,5 +1,7 @@
 package com.example.blackcarddenied.models
 
+import android.util.Log
+
 open class Round(
     private val questions: List<Question>
 ) {
@@ -8,6 +10,7 @@ open class Round(
     val fetchQuestion = GetQuestion()
 
     fun getCurrentQuestion(): Question? {
+        Log.d(this::class.simpleName, "questions.size ${questions.size}")
         return if (currentQuestionIndex < questions.size) {
             questions[currentQuestionIndex]
         } else {
@@ -20,13 +23,17 @@ open class Round(
     }
 
     open fun getRoundName(): String{
-        return "ROUND"
+        return "ROUND Name"
+    }
+
+    open fun getRoundDescription(): String{
+        return "ROUND Description"
     }
 
     fun answerQuestion(userAnswer: String, questionValue: Int): Boolean {
         val currentQuestion = getCurrentQuestion()
         return if (currentQuestion != null) {
-            val isCorrect = userAnswer == currentQuestion.correctAnswer
+            val isCorrect = userAnswer == currentQuestion.answer
             if (isCorrect) score += questionValue
             currentQuestionIndex++
             isCorrect
@@ -36,6 +43,12 @@ open class Round(
     }
 
     fun getScore(): Int = score
+
+    fun addToScore(addedPoints: Int){
+        score += addedPoints
+    }
+
+    fun getQuestionIndex(): Int = currentQuestionIndex
 
     fun isFinished(): Boolean = currentQuestionIndex >= questions.size
 }
