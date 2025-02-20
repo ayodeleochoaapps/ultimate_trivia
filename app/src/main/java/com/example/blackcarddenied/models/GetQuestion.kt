@@ -43,7 +43,7 @@ class GetQuestion {
         }
     }
 
-    suspend fun fetchRandomQuestions(): String {
+    suspend fun fetch10Questions(): String {
         return try {
             val response = generativeModel.generateContent(
                 content {
