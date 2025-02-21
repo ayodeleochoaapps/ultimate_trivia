@@ -16,7 +16,8 @@ data class GameData(
     var _answerB: String = "",
     var _answerC: String = "",
     var _answerD: String = "",
-    var _currentScore: Number = 0
+    var _currentScore: Number = 0,
+    var _totalScore: Number = 0
 ): BaseObservable() {
 
     var questionsLoaded: Boolean
@@ -103,6 +104,12 @@ data class GameData(
             notifyChange()
         }
 
+    var totalScore: Number
+        @Bindable get() = _totalScore
+        set(value) {
+            _totalScore = value
+            notifyChange()
+        }
 }
 
 

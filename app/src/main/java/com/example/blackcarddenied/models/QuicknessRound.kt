@@ -4,7 +4,7 @@ import android.content.Context
 import com.ayoapps.blackcarddenied.R
 
 
-class RandomRound(
+class QuicknessRound(
     private val context: Context,
     questions: List<Question>
 ) : Round(questions) {
@@ -14,10 +14,10 @@ class RandomRound(
     }
 
     override fun getRoundName(): String {
-        return context.getString(R.string.random_round)
+        return context.getString(R.string.quickness_round)
     }
 
     override fun getRoundDescription(): String {
-        return context.getString(R.string.random_round_desc)
+        return context.getString(R.string.quickness_round_desc)
     }
 }

@@ -52,6 +52,7 @@ class GameMainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+       // gameMainViewModel.completeReset()
         val roundDialogFragment = RoundDialogFragment()
         roundDialogFragment.show(parentFragmentManager, "RoundDialogFragment")
     }
@@ -86,6 +87,7 @@ class GameMainFragment : Fragment() {
             // Update UI based on the new state
             if (uiState == UiState.Finish){
                 showSummary()
+                gameMainViewModel.updateUiState(UiState.Initial)
             }
         }
     }
@@ -94,7 +96,7 @@ class GameMainFragment : Fragment() {
         val destinationFragment = GameSummaryFragment()
         parentFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, destinationFragment)
-            .addToBackStack(null)
+            .addToBackStack("gameToSummary")
             .commit()
     }
 
