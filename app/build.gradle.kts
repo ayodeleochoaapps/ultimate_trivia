@@ -115,6 +115,9 @@ dependencies {
     // kapt("androidx.lifecycle:lifecycle-compiler:2.3.1")
 
     kapt("com.android.tools.build:gradle:8.1.0")
+    implementation ("com.google.code.gson:gson:2.8.8")
+
+
 
 
 

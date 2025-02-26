@@ -1,21 +1,18 @@
 package com.example.blackcarddenied.views
 
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.compose.ui.graphics.Color
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.ayoapps.blackcarddenied.R
-import com.ayoapps.blackcarddenied.databinding.FragmentGameMainBinding
 import com.ayoapps.blackcarddenied.databinding.FragmentRoundDialogBinding
 import com.ayoapps.blackcarddenied.viewmodels.GameMainViewModel
-import com.example.blackcarddenied.models.GameData
 
 class RoundDialogFragment : DialogFragment() {
 
@@ -41,4 +38,23 @@ class RoundDialogFragment : DialogFragment() {
             dismiss() // Close the dialog
         }
     }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.let { window ->
+            val metrics = DisplayMetrics()
+            requireActivity().windowManager.defaultDisplay.getMetrics(metrics)
+
+            val width = (metrics.widthPixels * 0.9).toInt()  // 90% of screen width
+            val height = (metrics.heightPixels * 0.8).toInt() // 70% of screen height
+
+            window.setLayout(width, height)
+            window.setBackgroundDrawableResource(R.drawable.rounded_button_white_blue)
+        }
+/*        dialog?.window?.apply {
+            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+            setBackgroundDrawableResource(Color)) // Optional transparent background
+        }*/
+    }
+
 }

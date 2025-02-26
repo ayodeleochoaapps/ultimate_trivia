@@ -3,11 +3,14 @@ package com.ayoapps.blackcarddenied.views
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.setContentView
 import androidx.fragment.app.activityViewModels
@@ -30,18 +33,12 @@ import androidx.fragment.app.FragmentManager
 
 class GameMainFragment : Fragment() {
 
-    private val subjects = arrayOf("math", "science", "music", "movies", "tv shows", "art", "decades", "history",
-        "animals", "geography", "current events", "pop culture", "food", "sports")
-    private val difficulty = arrayOf("very easy", "easy", "medium", "hard", "very hard")
-
     private lateinit var binding: FragmentGameMainBinding
     //private val gameData = GameData()
   //  private lateinit var gameMainViewModel: GameMainViewModel
     private val gameMainViewModel: GameMainViewModel by activityViewModels()
 
     private var countdownTimer: CountDownTimer? = null
-
-
 
     companion object {
         fun newInstance() = GameMainFragment()
@@ -55,6 +52,8 @@ class GameMainFragment : Fragment() {
        // gameMainViewModel.completeReset()
         val roundDialogFragment = RoundDialogFragment()
         roundDialogFragment.show(parentFragmentManager, "RoundDialogFragment")
+
+        gameMainViewModel.initializeRounds()
     }
 
     override fun onCreateView(
@@ -74,7 +73,10 @@ class GameMainFragment : Fragment() {
        // gameData.roundName = "Round 1"
 
         gameMainViewModel.pickARound()
-        gameMainViewModel.generateRandomPoints()
+
+        gameMainViewModel.progressBarValue.observe(viewLifecycleOwner) { progress ->
+           binding.timerProgressBar.progress = progress
+        }
 
         return binding.root
     }

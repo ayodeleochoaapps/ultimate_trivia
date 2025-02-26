@@ -9,6 +9,8 @@ class RandomRound(
     questions: List<Question>
 ) : Round(questions) {
 
+    constructor(context: Context) : this(context, emptyList())
+
     override suspend fun getQuestions(): String{
         return fetchQuestion.fetch10Questions()
     }

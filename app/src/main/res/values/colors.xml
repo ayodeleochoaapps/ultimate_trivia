@@ -10,6 +10,11 @@
     <color name="green">#50C878</color>
     <color name="red">#FF0000</color>
     <color name="dark_gray">#A9A9A9</color>
-
+    <color name="blue">#1E90FF</color>
+    <color name="purple">#8A2BE2</color>
+    <color name="gold">#FFD700</color>
+    <color name="magenta">#FF1493</color>
+    <color name="transparent90">#E6000000</color>
+    <color name="transparent">#00FFFFFF</color>
 
 </resources>
