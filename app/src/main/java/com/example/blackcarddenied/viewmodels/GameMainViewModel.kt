@@ -1,6 +1,8 @@
 package com.ayoapps.blackcarddenied.viewmodels
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.os.CountDownTimer
 import android.util.Log
@@ -13,13 +15,18 @@ import androidx.lifecycle.viewModelScope
 import com.ayoapps.blackcarddenied.R
 import com.ayoapps.blackcarddenied.UiState
 import com.ayoapps.blackcarddenied.views.GameMainFragment
+import com.example.blackcarddenied.models.BuildUpRound
 import com.example.blackcarddenied.models.GameData
 import com.example.blackcarddenied.models.GetQuestion
 import com.example.blackcarddenied.models.Question
 import com.example.blackcarddenied.models.QuicknessRound
 import com.example.blackcarddenied.models.RandomRound
 import com.example.blackcarddenied.models.Round
+import com.google.common.reflect.TypeToken
+import com.google.gson.ExclusionStrategy
+import com.google.gson.FieldAttributes
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -60,6 +67,12 @@ private val _uiState = MutableLiveData<UiState>()
     private val getQuest = GetQuestion()
 
     lateinit var remainingRounds: MutableList<Round>
+    var buildUpCurrentValue = 25
+    val progressBarValue = MutableLiveData<Int>()
+
+    val gson = GsonBuilder()
+        .excludeFieldsWithoutExposeAnnotation() // Only serialize fields annotated with @Expose
+        .create()
 
     fun loadQuestion(prompt: String, difficulty: String){
         _uiState.value = UiState.Loading
@@ -84,27 +97,51 @@ private val _uiState = MutableLiveData<UiState>()
         }
     }
 
+    fun initializeRounds(){
+        remainingRounds = gameData.value?.remainingRounds ?: mutableListOf()
+
+        // If rounds not set then it's the first round and it needs to be initialized
+        if (remainingRounds.isEmpty()){
+            remainingRounds = mutableListOf(RandomRound(appContext), QuicknessRound(appContext), BuildUpRound(appContext))
+        }
+
+        round = remainingRounds.random()
+        if (round.getRoundName() == appContext.getString(R.string.random_round)){
+            generateRandomPoints()
+        }
+        remainingRounds.remove(round)
+        Log.d("${this::class.simpleName} gameData remainingRounds", remainingRounds.size.toString())
+        if (remainingRounds.size == 0){
+            gameData.value?.gameOver = true
+        }
+
+        gameData.value?.remainingRounds = remainingRounds
+        setInitialValues()
+    }
+
     fun pickARound(){
-        Log.d("gameData", "pickARound called")
+        Log.d("${this::class.simpleName} gameData", "pickARound called")
 
         viewModelScope.launch(Dispatchers.IO) {
-        getQuestions()
-        remainingRounds = mutableListOf(RandomRound(appContext, questions), QuicknessRound(appContext, questions))
-        round = remainingRounds.random()
-            remainingRounds.remove(round)
-            Log.d("gameData remainingRounds", round.getRoundName())
-            withContext(Dispatchers.Main) {
+            getQuestions()
+
+
+/*            withContext(Dispatchers.Main) {
                 setInitialValues()
-            }
+            }*/
 
             gameData.value?.questionsLoaded = true
-            gameData.value?.let { Log.d("questionsLoaded", it.questionsLoaded.toString()) }
+            gameData.value?.let { Log.d("${this::class.simpleName} questionsLoaded", it.questionsLoaded.toString()) }
 
         }
     }
 
     suspend fun getQuestions(){
-       val questionsJson = getQuest.fetch10Questions()
+        val questionsJson = if (round.getRoundName() == appContext.getString(R.string.build_up_round)){
+            getQuest.fetch10QuestionsBuildUp()
+        } else {
+            getQuest.fetch10Questions()
+        }
         Log.d(this::class.simpleName, "questions returned: $questionsJson")
         val questionsJsonTrimmed = questionsJson.replace("json", "")
         val questionsJsonTrimmed2 = questionsJsonTrimmed.replace("```", "")
@@ -114,10 +151,12 @@ private val _uiState = MutableLiveData<UiState>()
          //round = remainingRounds.random()
 
         Log.d(this::class.simpleName, questions.toString())
+
+        round.setQuestions(questions)
     }
 
     private fun setInitialValues() {
-        Log.d("gameData", "setInitialValues called")
+        Log.d("${this::class.simpleName} gameData", "setInitialValues called")
        // round = RandomRound(appContext, questions)
        /* _gameData.value?.apply {
             roundName = round.getRoundName()
@@ -125,7 +164,7 @@ private val _uiState = MutableLiveData<UiState>()
         _gameData.value = _gameData.value // Trigger LiveData observer*/
         gameData.value?.roundName = round.getRoundName()
         gameData.value?.roundDescription = round.getRoundDescription()
-        gameData.value?.let { Log.d("gameData", it.roundName) }
+        gameData.value?.let { Log.d("${this::class.simpleName} gameData", it.roundName) }
 
         _uiState.value = UiState.Initial
         gameData.value?.clockTime = "10"
@@ -202,7 +241,9 @@ private val _uiState = MutableLiveData<UiState>()
 
             // Handle the answer logic here
             val isCorrect = round.answerQuestion(userAnswer, getQuestionPointTotal(round))
-
+            if (round.getRoundName() == appContext.getString(R.string.build_up_round)){
+                updateBuildUpValue(isCorrect)
+            }
             // Show feedback and move to the next question
             var feedback = ""
             if (isCorrect){
@@ -219,6 +260,7 @@ private val _uiState = MutableLiveData<UiState>()
               //  showRoundSummary(binding)
                 Log.d(this::class.simpleName, "Round Over")
                 val currentScore = round.getScore()
+                gameData.value?.currentScore = currentScore
                 val totalScore = gameData.value?.totalScore?.toInt()
                 val finalScore = totalScore?.plus(currentScore)
                 if (finalScore != null) {
@@ -226,6 +268,7 @@ private val _uiState = MutableLiveData<UiState>()
                 }
                 countdownTimer?.cancel() // Cancel any existing timer
                 updateUiState(UiState.Finish)
+                gameData.value?.questionsLoaded = false
             } else {
                 displayNextQuestion()
             }
@@ -237,9 +280,24 @@ private val _uiState = MutableLiveData<UiState>()
         when (currentRound){
             is RandomRound -> return randomPointTotals[round.getQuestionIndex()]
             is QuicknessRound -> return round((timeRemaing/100).toDouble()).toInt()
+            is BuildUpRound -> return buildUpCurrentValue
         }
         // If all else fails
         return 100
+    }
+
+    private fun updateBuildUpValue(isCorrect: Boolean){
+        Log.d(this::class.simpleName, "buildUpCurrentValue called")
+        if (isCorrect){
+            if (buildUpCurrentValue < 125){
+                buildUpCurrentValue += 25
+            }
+        } else {
+            if (buildUpCurrentValue > 25){
+                buildUpCurrentValue -= 25
+            }
+        }
+        Log.d(this::class.simpleName, "buildUpCurrentValue: $buildUpCurrentValue")
     }
 
     fun updateUiState(uiState: UiState){
@@ -247,7 +305,13 @@ private val _uiState = MutableLiveData<UiState>()
     }
 
     private fun updateUI(){
-        gameData.value?.currentPointTotal = randomPointTotals[round.getQuestionIndex()]
+        if (round.getRoundName() == appContext.getString(R.string.random_round)){
+            gameData.value?.currentPointTotal = randomPointTotals[round.getQuestionIndex()]
+        } else if (round.getRoundName() == appContext.getString(R.string.build_up_round)){
+            Log.d(this::class.simpleName, "roundName: ${round.getRoundName()}")
+            gameData.value?.currentPointTotal = buildUpCurrentValue
+        }
+
         gameData.value?.currentCategory = currentQuestion!!.category
         gameData.value?.currentScore = round.getScore()
     }
@@ -257,13 +321,19 @@ private val _uiState = MutableLiveData<UiState>()
 
         countdownTimer = object : CountDownTimer(durationMillis, 10) { // Tick every 10ms for hundredths of a second
             override fun onTick(millisUntilFinished: Long) {
+
                 val seconds = millisUntilFinished / 1000
                 val hundredths = (millisUntilFinished % 1000) / 10
                 gameData.value?.clockTime = "$seconds:$hundredths"
                 timeRemaing = millisUntilFinished
 
-                gameData.value?.currentPointTotal = round((timeRemaing/100).toDouble()).toInt()
+                if (round.getRoundName() == appContext.getString(R.string.quickness_round)){
+                    gameData.value?.currentPointTotal = round((timeRemaing/100).toDouble()).toInt()
+                }
 
+                // Update progress bar
+                val progress = ((millisUntilFinished.toFloat() / durationMillis) * 100).toInt()
+                progressBarValue.postValue(progress)
                 //   binding.txtClock.text = "$seconds : $hundredths"
             }
 
@@ -278,6 +348,8 @@ private val _uiState = MutableLiveData<UiState>()
                     incorrectSound.start()
                     displayNextQuestion()
                 }
+
+                progressBarValue.postValue(0)
             }
         }.start()
     }

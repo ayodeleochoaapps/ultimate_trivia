@@ -9,27 +9,28 @@
     <string name="image3_description">Cake</string>
     <string name="results_placeholder">(Results will appear here)</string>
     <string name="start_game">Start Game</string>
+    <string name="start_new_game">Start New Game</string>
     <string name="black_card_denied">Black Card Denied</string>
     <string name="random_round">RANDOM ROUND</string>
     <string name="quickness_round">QUICKNESS ROUND</string>
     <string name="build_up_round">BUILD UP ROUND</string>
-    <string name="random_round_desc">In this round the points for each question will have a random value.</string>
-    <string name="quickness_round_desc">In this round the quicker you select the correct answer, the more points you receive.</string>
-    <string name="build_up_round_desc">In this round every time you get a correct answer the value of the question increases.</string>
+    <string name="random_round_desc">In this round the points for each question will have a random value</string>
+    <string name="quickness_round_desc">In this round the quicker you select the correct answer the more points you receive</string>
+    <string name="build_up_round_desc">In this round the more questions you answer correctly in a row the higher the points you receive</string>
     <string name="round1">ROUND 1</string>
-    <string name="round2">ROUND 1</string>
+    <string name="round2">ROUND 2</string>
     <string name="round3">ROUND 3</string>
     <string name="history">HISTORY</string>
     <string name="_60">60</string>
     <string name="woodchuck">How much wood would a woodchuck chuck if a woodchuck could chuck wood?</string>
-    <string name="points">POINTS:</string>
+    <string name="points">POINTS</string>
     <string name="_25">25</string>
-    <string name="score">SCORE:</string>
+    <string name="current_score">CURRENT SCORE</string>
     <string name="_0">0</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="start">Start</string>
     <string name="round_score">Round Score</string>
     <string name="next_round">Next Round</string>
     <string name="total_score">Total Score</string>
+    <string name="grade">Grade</string>
+    <string name="begin_round">BEGIN ROUND</string>
 </resources>

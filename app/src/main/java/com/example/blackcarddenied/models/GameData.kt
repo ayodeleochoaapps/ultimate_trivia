@@ -17,7 +17,9 @@ data class GameData(
     var _answerC: String = "",
     var _answerD: String = "",
     var _currentScore: Number = 0,
-    var _totalScore: Number = 0
+    var _totalScore: Number = 0,
+    var _remainingRounds: MutableList<Round> = mutableListOf(),
+    var _gameOver: Boolean = false,
 ): BaseObservable() {
 
     var questionsLoaded: Boolean
@@ -108,6 +110,20 @@ data class GameData(
         @Bindable get() = _totalScore
         set(value) {
             _totalScore = value
+            notifyChange()
+        }
+
+    var remainingRounds: MutableList<Round>
+        @Bindable get() = _remainingRounds
+        set(value) {
+            _remainingRounds = value
+            notifyChange()
+        }
+
+    var gameOver: Boolean
+        @Bindable get() = _gameOver
+        set(value) {
+            _gameOver = value
             notifyChange()
         }
 }

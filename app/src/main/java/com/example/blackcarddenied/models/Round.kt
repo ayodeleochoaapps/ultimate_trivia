@@ -3,7 +3,7 @@ package com.example.blackcarddenied.models
 import android.util.Log
 
 open class Round(
-    private val questions: List<Question>
+    private var questions: List<Question>
 ) {
     private var currentQuestionIndex = 0
     private var score = 0
@@ -20,6 +20,10 @@ open class Round(
 
     open suspend fun getQuestions(): String{
       return  fetchQuestion.fetchQuestion("sports", "easy")
+    }
+
+    open fun setQuestions(fetchedQuestions: List<Question>){
+        questions = fetchedQuestions
     }
 
     open fun getRoundName(): String{

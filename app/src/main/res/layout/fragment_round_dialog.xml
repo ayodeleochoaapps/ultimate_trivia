@@ -16,6 +16,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:gravity="center"
     android:padding="16dp">
 
     <TextView
@@ -23,9 +24,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@{gameViewModel.gameData.roundName}"
-        android:textSize="30sp"
+        android:textSize="36sp"
         android:textStyle="bold"
-        android:textColor="@color/black"
+        android:textColor="@color/purple"
+        android:fontFamily="@font/mikado_bold"
         android:textAlignment="center"
         android:paddingBottom="16dp" />
 
@@ -34,8 +36,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@{gameViewModel.gameData.roundDescription}"
-        android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        android:fontFamily="@font/mikado_bold"
         android:textAlignment="center"
         android:paddingBottom="16dp" />
 
@@ -44,8 +47,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:enabled="@{gameViewModel.gameData.questionsLoaded}"
-        android:text="@string/start"
+        android:text="@string/begin_round"
+        android:textSize="36sp"
         android:textStyle="bold"
+        android:fontFamily="@font/super_trivia"
         android:background="@drawable/button_color_selector"
         android:textColor="@android:color/white" />
 </LinearLayout>
