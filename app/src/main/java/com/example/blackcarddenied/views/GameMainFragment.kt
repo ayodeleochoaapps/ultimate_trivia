@@ -51,6 +51,7 @@ class GameMainFragment : Fragment() {
 
        // gameMainViewModel.completeReset()
         val roundDialogFragment = RoundDialogFragment()
+        roundDialogFragment.isCancelable = false
         roundDialogFragment.show(parentFragmentManager, "RoundDialogFragment")
 
         gameMainViewModel.initializeRounds()

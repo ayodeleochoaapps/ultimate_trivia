@@ -12,6 +12,8 @@ class GameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game)
+        supportActionBar?.hide()  // Hide ActionBar programmatically
+
 
         // Check if this is the first time the activity is being created
         if (savedInstanceState == null) {

@@ -1,4 +1,5 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -10,14 +11,12 @@
             type = "com.ayoapps.blackcarddenied.viewmodels.GameMainViewModel" />
     </data>
 
-    <LinearLayout
-
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:layout_height="match_parent"
+        android:background="@drawable/rounded_button_purple_magenta">
 
-        <TextView
+ <!--       <TextView
             android:id="@+id/txtRoundScoreTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,18 +59,9 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textAlignment="center"
-            android:paddingBottom="16dp" />
+            android:paddingBottom="16dp" />-->
 
-        <Button
-            android:id="@+id/nextRoundButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@{gameViewModel.gameData.gameOver ? @string/start_new_game : @string/next_round}"
-            android:textStyle="bold"
-            android:background="@drawable/button_color_selector"
-            android:textColor="@android:color/white" />
-
-        <TextView
+<!--        <TextView
             android:id="@+id/txtGradeTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -81,9 +71,9 @@
             android:textColor="@color/black"
             android:textAlignment="center"
             android:paddingBottom="16dp"
-            android:layout_marginTop="48dp" />
+            android:layout_marginTop="48dp" />-->
 
-        <TextView
+<!--        <TextView
             android:id="@+id/txtGrade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -92,8 +82,58 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:textAlignment="center"
-            android:paddingBottom="16dp" />
+            android:paddingBottom="16dp" />-->
+
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/circuar_progress_bar"
+            android:progress="75"
+            app:trackColor="@color/dark_gray"
+            app:indicatorColor="@color/gold"
+            app:trackCornerRadius="10dp"
+            app:indicatorSize="300dp"
+            app:trackThickness="25dp"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:padding="16dp"/>
+
+        <TextView
+            android:id="@+id/percentageScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="200sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:fontFamily="@font/bartone"
+            android:layout_centerInParent="true"/>
+
+        <Button
+            android:id="@+id/nextRoundButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{gameViewModel.gameData.gameOver ? @string/start_new_game : @string/next_round}"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:background="@drawable/button_color_selector"
+            android:fontFamily="@font/super_trivia"
+            android:textColor="@android:color/white"
+            android:layout_below="@+id/circuar_progress_bar"/>
+
+        <TextView
+            android:id="@+id/scoreComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I bow to your superior knowledge. Also, do you do tutoring?"
+            android:textSize="25sp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:fontFamily="@font/bartone"
+            android:layout_above="@id/circuar_progress_bar"/>
 
 
-    </LinearLayout>
+
+    </RelativeLayout>
 </layout>

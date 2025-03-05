@@ -22,7 +22,13 @@ import com.example.blackcarddenied.models.Question
 import com.example.blackcarddenied.models.QuicknessRound
 import com.example.blackcarddenied.models.RandomRound
 import com.example.blackcarddenied.models.Round
+import com.example.blackcarddenied.models.Score
 import com.google.common.reflect.TypeToken
+import com.google.firebase.Firebase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
 import com.google.gson.ExclusionStrategy
 import com.google.gson.FieldAttributes
 import com.google.gson.Gson
@@ -35,6 +41,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 import kotlin.math.round
 import kotlin.random.Random
 
@@ -70,9 +78,65 @@ private val _uiState = MutableLiveData<UiState>()
     var buildUpCurrentValue = 25
     val progressBarValue = MutableLiveData<Int>()
 
-    val gson = GsonBuilder()
-        .excludeFieldsWithoutExposeAnnotation() // Only serialize fields annotated with @Expose
-        .create()
+    // Write a message to the database
+    val database = Firebase.database
+    val scoresReference = database.getReference("scores")
+
+    private fun saveFinalScore(score: Int){
+        val newScoreRef = scoresReference.push() // Generate a unique key
+        val key = newScoreRef.key  // Get the generated key
+
+        if (key != null) {
+            val scoreData = Score(key, score) // Create a Score object
+
+            newScoreRef.setValue(scoreData)
+                .addOnSuccessListener {
+                    Log.d(this::class.simpleName, "New score added successfully: $scoreData")
+                }
+                .addOnFailureListener { e ->
+                    Log.e(this::class.simpleName, "New score not saved - Error: $e")
+                }
+        }
+    }
+
+    private suspend fun calculatePercentile(): Int = suspendCoroutine { continuation ->
+        scoresReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                var totalDatabaseScore = 0
+                var scores = 0
+                var scoresBelow = 0
+                val totalScore = gameData.value?.totalScore?.toInt() ?: 0
+
+                for (userSnapshot in snapshot.children) {
+                    val score = userSnapshot.child("score").getValue(Int::class.java) ?: 0
+                    totalDatabaseScore += score
+                    scores++
+                    if (score <= totalScore) {
+                        scoresBelow++
+                    }
+                }
+
+                val percentile = if (scores > 0) (scoresBelow.toDouble() / scores.toDouble()) * 100 else 0.0
+                gameData.value?.percentile = percentile.toInt()
+
+                Log.d(javaClass.simpleName, "firedb calculated percentile: ${gameData.value?.percentile}")
+
+                // Resume coroutine with calculated percentile
+                continuation.resume(percentile.toInt())
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(javaClass.simpleName, "Error: ${error.message}")
+                continuation.resume(0) // Resume with 0 in case of an error
+            }
+        })
+    }
+
+    suspend fun processFinalScore(totalScore: Int): Int {
+        saveFinalScore(totalScore) // ✅ Waits for completion
+        return calculatePercentile() // ✅ Waits for percentile calculation before returning
+    }
+
 
     fun loadQuestion(prompt: String, difficulty: String){
         _uiState.value = UiState.Loading
@@ -167,7 +231,7 @@ private val _uiState = MutableLiveData<UiState>()
         gameData.value?.let { Log.d("${this::class.simpleName} gameData", it.roundName) }
 
         _uiState.value = UiState.Initial
-        gameData.value?.clockTime = "10"
+       // gameData.value?.clockTime = "10"
     }
 
     fun generateRandomPoints(){
@@ -217,7 +281,6 @@ private val _uiState = MutableLiveData<UiState>()
         Log.d(this::class.simpleName, "displayNextQuestion called...")
         currentQuestion = round.getCurrentQuestion()
         if (currentQuestion != null && !round.isFinished()) {
-            Log.d(this::class.simpleName, "currentQuestion!!.options[0] ${currentQuestion!!.options[0]}")
             // Display the question on the UI
             gameData.value?.currentQuestion = currentQuestion!!.question
             gameData.value?.currentCategory = currentQuestion!!.category
@@ -244,17 +307,13 @@ private val _uiState = MutableLiveData<UiState>()
             if (round.getRoundName() == appContext.getString(R.string.build_up_round)){
                 updateBuildUpValue(isCorrect)
             }
-            // Show feedback and move to the next question
-            var feedback = ""
+            // Play sound to indicate if user's answer is correct or incorrect
             if (isCorrect){
-                 feedback = "Correct!"
                 correctSound.start()
             } else {
-                feedback = "Wrong!"
                 incorrectSound.start()
             }
 
-            Log.d(this::class.simpleName, "feedback: $feedback")
             Log.d(this::class.simpleName, "currentScore: ${round.getScore()}")
             if (round.isFinished()) {
               //  showRoundSummary(binding)
@@ -269,6 +328,10 @@ private val _uiState = MutableLiveData<UiState>()
                 countdownTimer?.cancel() // Cancel any existing timer
                 updateUiState(UiState.Finish)
                 gameData.value?.questionsLoaded = false
+                val previousRoundsCompleted = gameData.value?.roundsCompleted?.toInt()
+                if (previousRoundsCompleted != null) {
+                    gameData.value?.roundsCompleted = previousRoundsCompleted + 1
+                }
             } else {
                 displayNextQuestion()
             }
@@ -322,9 +385,9 @@ private val _uiState = MutableLiveData<UiState>()
         countdownTimer = object : CountDownTimer(durationMillis, 10) { // Tick every 10ms for hundredths of a second
             override fun onTick(millisUntilFinished: Long) {
 
-                val seconds = millisUntilFinished / 1000
+/*                val seconds = millisUntilFinished / 1000
                 val hundredths = (millisUntilFinished % 1000) / 10
-                gameData.value?.clockTime = "$seconds:$hundredths"
+                gameData.value?.clockTime = "$seconds:$hundredths"*/
                 timeRemaing = millisUntilFinished
 
                 if (round.getRoundName() == appContext.getString(R.string.quickness_round)){
@@ -339,13 +402,28 @@ private val _uiState = MutableLiveData<UiState>()
 
             override fun onFinish() {
               //  binding.txtClock.text = "00.00" // Display 0 when the countdown finishes
-                gameData.value?.clockTime = "00.00"
+              //  gameData.value?.clockTime = "00.00"
+                round.answerQuestion("", 0)
+                incorrectSound.start()
 
                 if (round.isFinished()){
-                    // End Round / Do Nothing
+                    Log.d(this::class.simpleName, "Round Over")
+                    val currentScore = round.getScore()
+                    gameData.value?.currentScore = currentScore
+                    val totalScore = gameData.value?.totalScore?.toInt()
+                    val finalScore = totalScore?.plus(currentScore)
+                    if (finalScore != null) {
+                        gameData.value?.totalScore = finalScore
+                    }
+                    countdownTimer?.cancel() // Cancel any existing timer
+                    updateUiState(UiState.Finish)
+                    gameData.value?.questionsLoaded = false
+                    val previousRoundsCompleted = gameData.value?.roundsCompleted?.toInt()
+                    if (previousRoundsCompleted != null) {
+                        gameData.value?.roundsCompleted = previousRoundsCompleted + 1
+                    }
                 } else {
-                    round.answerQuestion("", randomPointTotals[round.getQuestionIndex()])
-                    incorrectSound.start()
+                    round.answerQuestion("", 0)
                     displayNextQuestion()
                 }
 
@@ -353,11 +431,4 @@ private val _uiState = MutableLiveData<UiState>()
             }
         }.start()
     }
-
-    fun completeReset(){
-        Log.d(this::class.simpleName, "Complete reset called...")
-        _uiState.value = UiState.Initial
-        gameData.value?.clockTime = "10"
-    }
-
 }

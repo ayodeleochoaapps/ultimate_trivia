@@ -12,5 +12,5 @@ pluginManagement {
     }
 }
 
-rootProject.name = "Black Card Denied"
+rootProject.name = "Ultimate Trivia"
 include(":app")

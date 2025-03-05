@@ -15,6 +15,10 @@ val uiState: StateFlow<UiState> =
     _uiState.asStateFlow()
 
 val gameData = GameData()
+val categoriesList = arrayOf("math", "science", "music", "movies", "tv shows", "art", "decades", "history",
+    "animals", "geography", "current events", "pop culture", "food", "sports", "random facts", "famous people",
+    "world records", "astronomy", "medicine", "celebrities", "animation", "video games", "literature",
+    "board games", "mythology", "inventions", "fashion", "food", "slang", "memes", "social media", "comics")
 
 
 class GetQuestion {
@@ -48,9 +52,10 @@ class GetQuestion {
             val response = generativeModel.generateContent(
                 content {
                     text(
-                        "return 10 unique questions that have not been returned previously from any of the following subjects: math, science, music, movies, tv shows, art, decades, history" +
-                                "animals, geography, current events, pop culture, food or sports with 4 options and also " +
-                                "return the correct answer with a difficulty of either very easy, easy, medium, hard and very hard. " +
+                        "return 10 unique questions that have not been returned previously from any of the following subjects: " +
+                                "${categoriesList.random()}, ${categoriesList.random()}, ${categoriesList.random()}, ${categoriesList.random()}, ${categoriesList.random()}" +
+                                "${categoriesList.random()}, ${categoriesList.random()}, ${categoriesList.random()}, ${categoriesList.random()}, ${categoriesList.random()}" +
+                                "with 4 options and also return the correct answer with a difficulty of either very easy, easy, medium, hard and very hard. " +
                                 "Return in the proper JSON Array format returning nothing before the brackets, with keys question, options, answer, difficulty and category."
                     )
                 }
@@ -68,8 +73,9 @@ class GetQuestion {
             val response = generativeModel.generateContent(
                 content {
                     text(
-                        "return 15 unique questions that have not been returned previously from any of the following subjects: math, science, music, movies, tv shows, art, decades, history" +
-                                "animals, geography, current events, pop culture, food or sports with 4 options and also " +
+                        "return 10 unique questions that have not been returned previously from any of the following subjects: " +
+                                "${categoriesList.random()}, ${categoriesList.random()}, ${categoriesList.random()}, ${categoriesList.random()}, ${categoriesList.random()}, " +
+                                "${categoriesList.random()}, ${categoriesList.random()}, ${categoriesList.random()}, ${categoriesList.random()}, ${categoriesList.random()}" +
                                 "return the correct answer. Return the questions in this order: 1 very easy question, 2 easy questions, 4 medium questions, 2 hard questions, 1 very hard question. " +
                                 "Return in the proper JSON Array format returning nothing before the brackets, with keys question, options, answer, difficulty and category."
                     )
