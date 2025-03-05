@@ -117,6 +117,13 @@ dependencies {
     kapt("com.android.tools.build:gradle:8.1.0")
     implementation ("com.google.code.gson:gson:2.8.8")
 
+    // Import the BoM for the Firebase platform
+    implementation(platform("com.google.firebase:firebase-bom:33.10.0"))
+
+    // Add the dependency for the Realtime Database library
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation("com.google.firebase:firebase-database")
+
 
 
 

@@ -20,6 +20,9 @@ data class GameData(
     var _totalScore: Number = 0,
     var _remainingRounds: MutableList<Round> = mutableListOf(),
     var _gameOver: Boolean = false,
+    var _roundsCompleted: Number = 0,
+    var _percentile: Number = 0
+
 ): BaseObservable() {
 
     var questionsLoaded: Boolean
@@ -124,6 +127,20 @@ data class GameData(
         @Bindable get() = _gameOver
         set(value) {
             _gameOver = value
+            notifyChange()
+        }
+
+    var roundsCompleted: Number
+        @Bindable get() = _roundsCompleted
+        set(value) {
+            _roundsCompleted = value
+            notifyChange()
+        }
+
+    var percentile: Number
+        @Bindable get() = _percentile
+        set(value) {
+            _percentile = value
             notifyChange()
         }
 }
