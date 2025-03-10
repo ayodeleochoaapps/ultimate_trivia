@@ -1,8 +1,7 @@
-package com.example.blackcarddenied.models
+package com.example.ultimatetrivia.models
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
-import com.ayoapps.blackcarddenied.BR
 
 data class GameData(
     var _questionsLoaded: Boolean = false,
@@ -23,7 +22,7 @@ data class GameData(
     var _roundsCompleted: Number = 0,
     var _percentile: Number = 0
 
-): BaseObservable() {
+) : BaseObservable() {
 
     var questionsLoaded: Boolean
         @Bindable get() = _questionsLoaded
