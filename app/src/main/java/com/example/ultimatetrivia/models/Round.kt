@@ -1,4 +1,4 @@
-package com.example.blackcarddenied.models
+package com.example.ultimatetrivia.models
 
 import android.util.Log
 
@@ -18,19 +18,19 @@ open class Round(
         }
     }
 
-    open suspend fun getQuestions(): String{
-      return  fetchQuestion.fetchQuestion("sports", "easy")
+    open suspend fun getQuestions(): String {
+        return fetchQuestion.fetchQuestion("sports", "easy")
     }
 
-    open fun setQuestions(fetchedQuestions: List<Question>){
+    open fun setQuestions(fetchedQuestions: List<Question>) {
         questions = fetchedQuestions
     }
 
-    open fun getRoundName(): String{
+    open fun getRoundName(): String {
         return "ROUND Name"
     }
 
-    open fun getRoundDescription(): String{
+    open fun getRoundDescription(): String {
         return "ROUND Description"
     }
 
@@ -47,10 +47,6 @@ open class Round(
     }
 
     fun getScore(): Int = score
-
-    fun addToScore(addedPoints: Int){
-        score += addedPoints
-    }
 
     fun getQuestionIndex(): Int = currentQuestionIndex
 

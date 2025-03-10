@@ -1,8 +1,7 @@
-package com.example.blackcarddenied.models
+package com.example.ultimatetrivia.models
 
 import android.content.Context
-import com.ayoapps.blackcarddenied.R
-
+import com.ayoapps.ultimatetrivia.R
 
 class BuildUpRound(
     private val context: Context,
@@ -11,7 +10,7 @@ class BuildUpRound(
 
     constructor(context: Context) : this(context, emptyList())
 
-    override suspend fun getQuestions(): String{
+    override suspend fun getQuestions(): String {
         return fetchQuestion.fetch10QuestionsBuildUp()
     }
 

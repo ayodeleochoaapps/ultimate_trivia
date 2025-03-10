@@ -1,14 +1,13 @@
-package com.ayoapps.blackcarddenied.views
+package com.ayoapps.ultimatetrivia.views
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.ayoapps.blackcarddenied.R
+import com.ayoapps.ultimatetrivia.R
 
 class WelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,12 +20,10 @@ class WelcomeActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
     }
 
     fun onStartGame(view: View) {
         val intent = Intent(this, GameActivity::class.java)
         startActivity(intent)
     }
-
 }

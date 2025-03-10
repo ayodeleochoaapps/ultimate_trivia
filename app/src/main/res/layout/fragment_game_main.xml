@@ -5,11 +5,11 @@
 <data>
     <variable
         name = "gameData"
-        type = "com.example.blackcarddenied.models.GameData" />
+        type = "com.example.ultimatetrivia.models.GameData" />
 
     <variable
         name = "gameViewModel"
-        type = "com.ayoapps.blackcarddenied.viewmodels.GameMainViewModel" />
+        type = "com.ayoapps.ultimatetrivia.viewmodels.GameMainViewModel" />
 
 </data>
 

@@ -1,21 +1,22 @@
 {
   "project_info": {
-    "project_number": "783775866448",
-    "project_id": "blackcarddenied",
-    "storage_bucket": "blackcarddenied.firebasestorage.app"
+    "project_number": "936582205763",
+    "firebase_url": "https://ultimate-trivia-7135d-default-rtdb.firebaseio.com",
+    "project_id": "ultimate-trivia-7135d",
+    "storage_bucket": "ultimate-trivia-7135d.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:783775866448:android:f23301f57fea65d6943b55",
+        "mobilesdk_app_id": "1:936582205763:android:b641f46fb97a3f46c49ff6",
         "android_client_info": {
-          "package_name": "com.ayoapps.blackcarddenied"
+          "package_name": "com.ayoapps.ultimatetrivia"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyA6fhbJigOz_jREsRJpcKan5qJ8E4EqeAQ"
+          "current_key": "AIzaSyD1nliT5NfYUcv5ntU3H7UiYzSBq7RhQLc"
         }
       ],
       "services": {

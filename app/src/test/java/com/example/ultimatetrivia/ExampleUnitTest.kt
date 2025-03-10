@@ -1,4 +1,4 @@
-package com.ayoapps.blackcarddenied
+package com.ayoapps.ultimatetrivia
 
 import org.junit.Test
 

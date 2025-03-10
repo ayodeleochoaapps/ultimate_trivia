@@ -1,25 +1,49 @@
-package com.example.blackcarddenied.models
+package com.example.ultimatetrivia.models
 
-import android.util.Log
-import com.ayoapps.blackcarddenied.BuildConfig
-import com.ayoapps.blackcarddenied.UiState
+import com.ayoapps.ultimatetrivia.BuildConfig
+import com.ayoapps.ultimatetrivia.UiState
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 private val _uiState: MutableStateFlow<UiState> =
     MutableStateFlow(UiState.Initial)
-val uiState: StateFlow<UiState> =
-    _uiState.asStateFlow()
 
 val gameData = GameData()
-val categoriesList = arrayOf("math", "science", "music", "movies", "tv shows", "art", "decades", "history",
-    "animals", "geography", "current events", "pop culture", "food", "sports", "random facts", "famous people",
-    "world records", "astronomy", "medicine", "celebrities", "animation", "video games", "literature",
-    "board games", "mythology", "inventions", "fashion", "food", "slang", "memes", "social media", "comics")
-
+val categoriesList = arrayOf(
+    "math",
+    "science",
+    "music",
+    "movies",
+    "tv shows",
+    "art",
+    "decades",
+    "history",
+    "animals",
+    "geography",
+    "current events",
+    "pop culture",
+    "food",
+    "sports",
+    "random facts",
+    "famous people",
+    "world records",
+    "astronomy",
+    "medicine",
+    "celebrities",
+    "animation",
+    "video games",
+    "literature",
+    "board games",
+    "mythology",
+    "inventions",
+    "fashion",
+    "food",
+    "slang",
+    "memes",
+    "social media",
+    "comics"
+)
 
 class GetQuestion {
 
@@ -88,23 +112,4 @@ class GetQuestion {
             throw Exception("Error fetching question: ${e.localizedMessage}", e)
         }
     }
-
-/*    suspend fun fetchRandomQuestions(prompt: String, difficulty: String): String {
-        _uiState.value = UiState.Loading
-        return try {
-            val response = generativeModel.generateContent(
-                content {
-                    text(
-                        "return a question about $prompt with 4 options and also return the correct answer with the difficulty of $difficulty. " +
-                                "with 4 options and return in the proper JSON Array format returning nothing before the brackets, with keys question, options, answer, difficulty and category."
-                    )
-                }
-            )
-            println(response.text)
-            response.text ?: throw Exception("Empty response from model")
-
-        } catch (e: Exception) {
-            throw Exception("Error fetching question: ${e.localizedMessage}", e)
-        }
-    }*/
 }

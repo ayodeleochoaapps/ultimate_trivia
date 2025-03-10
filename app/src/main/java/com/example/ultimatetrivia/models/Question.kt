@@ -1,4 +1,4 @@
-package com.example.blackcarddenied.models
+package com.example.ultimatetrivia.models
 
 data class Question(
     val question: String,

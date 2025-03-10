@@ -1,18 +1,16 @@
-package com.example.blackcarddenied.views
+package com.example.ultimatetrivia.views
 
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.compose.ui.graphics.Color
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
-import com.ayoapps.blackcarddenied.R
-import com.ayoapps.blackcarddenied.databinding.FragmentRoundDialogBinding
-import com.ayoapps.blackcarddenied.viewmodels.GameMainViewModel
+import com.ayoapps.ultimatetrivia.R
+import com.ayoapps.ultimatetrivia.databinding.FragmentRoundDialogBinding
+import com.ayoapps.ultimatetrivia.viewmodels.GameMainViewModel
 
 class RoundDialogFragment : DialogFragment() {
 
@@ -51,10 +49,5 @@ class RoundDialogFragment : DialogFragment() {
             window.setLayout(width, height)
             window.setBackgroundDrawableResource(R.drawable.rounded_button_white_blue)
         }
-/*        dialog?.window?.apply {
-            setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-            setBackgroundDrawableResource(Color)) // Optional transparent background
-        }*/
     }
-
 }

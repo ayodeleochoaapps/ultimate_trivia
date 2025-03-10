@@ -1,4 +1,4 @@
-package com.ayoapps.blackcarddenied
+package com.ayoapps.ultimatetrivia
 
 /**
  * A sealed hierarchy describing the state of the text generation.
